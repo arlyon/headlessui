@@ -114,10 +114,17 @@ export function sortByDomNode<T>(
 }
 
 export function focusIn(container: HTMLElement | HTMLElement[], focus: Focus) {
+  let ownerDocument =
+    (Array.isArray(container)
+      ? container.length > 0
+        ? container[0].ownerDocument
+        : document
+      : container?.ownerDocument) ?? document
+
   let elements = Array.isArray(container)
     ? sortByDomNode(container)
     : getFocusableElements(container)
-  let active = document.activeElement as HTMLElement
+  let active = ownerDocument.activeElement as HTMLElement
 
   let direction = (() => {
     if (focus & (Focus.First | Focus.Next)) return Direction.Next
@@ -160,7 +167,7 @@ export function focusIn(container: HTMLElement | HTMLElement[], focus: Focus) {
 
     // Try the next one in line
     offset += direction
-  } while (next !== document.activeElement)
+  } while (next !== ownerDocument.activeElement)
 
   // This is a little weird, but let me try and explain: There are a few scenario's
   // in chrome for example where a focused `<a>` tag does not get the default focus

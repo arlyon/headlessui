@@ -36,6 +36,7 @@ import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
 import { useLatestValue } from '../../hooks/use-latest-value'
 import { useTreeWalker } from '../../hooks/use-tree-walker'
 import { sortByDomNode } from '../../utils/focus-management'
+import { getOwnerDocument } from '../../utils/owner-document'
 
 enum ComboboxStates {
   Open,
@@ -858,6 +859,7 @@ let Option = forwardRefWithAs(function Option<
   let internalOptionRef = useRef<HTMLLIElement | null>(null)
   let bag = useRef<ComboboxOptionDataRef['current']>({ disabled, value, domRef: internalOptionRef })
   let optionRef = useSyncRefs(ref, internalOptionRef)
+  let ownerDocument = getOwnerDocument(internalOptionRef)
 
   useIsoMorphicEffect(() => {
     bag.current.disabled = disabled
@@ -866,8 +868,8 @@ let Option = forwardRefWithAs(function Option<
     bag.current.value = value
   }, [bag, value])
   useIsoMorphicEffect(() => {
-    bag.current.textValue = document.getElementById(id)?.textContent?.toLowerCase()
-  }, [bag, id])
+    bag.current.textValue = ownerDocument.getElementById(id)?.textContent?.toLowerCase()
+  }, [bag, id, ownerDocument])
 
   let select = useCallback(() => actions.selectOption(id), [actions, id])
 
@@ -899,10 +901,10 @@ let Option = forwardRefWithAs(function Option<
     if (state.activationTrigger === ActivationTrigger.Pointer) return
     let d = disposables()
     d.requestAnimationFrame(() => {
-      document.getElementById(id)?.scrollIntoView?.({ block: 'nearest' })
+      ownerDocument.getElementById(id)?.scrollIntoView?.({ block: 'nearest' })
     })
     return d.dispose
-  }, [id, active, state.comboboxState, state.activationTrigger, /* We also want to trigger this when the position of the active item changes so that we can re-trigger the scrollIntoView */ state.activeOptionIndex])
+  }, [id, active, state.comboboxState, ownerDocument, state.activationTrigger, /* We also want to trigger this when the position of the active item changes so that we can re-trigger the scrollIntoView */ state.activeOptionIndex])
 
   let handleClick = useCallback(
     (event: { preventDefault: Function }) => {

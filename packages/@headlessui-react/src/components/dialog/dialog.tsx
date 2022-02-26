@@ -33,6 +33,7 @@ import { useWindowEvent } from '../../hooks/use-window-event'
 import { useOpenClosed, State } from '../../internal/open-closed'
 import { useServerHandoffComplete } from '../../hooks/use-server-handoff-complete'
 import { StackProvider, StackMessage } from '../../internal/stack-context'
+import { getOwnerDocument } from '../../utils/owner-document'
 
 enum DialogStates {
   Open,
@@ -232,17 +233,20 @@ let DialogRoot = forwardRefWithAs(function Dialog<
     if (dialogState !== DialogStates.Open) return
     if (hasParentDialog) return
 
-    let overflow = document.documentElement.style.overflow
-    let paddingRight = document.documentElement.style.paddingRight
+    let ownerDocument = getOwnerDocument(internalDialogRef.current)
+    let ownerWindow = ownerDocument.documentElement as unknown as Window
 
-    let scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    let overflow = ownerDocument.documentElement.style.overflow
+    let paddingRight = ownerDocument.documentElement.style.paddingRight
 
-    document.documentElement.style.overflow = 'hidden'
-    document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+    let scrollbarWidth = ownerWindow.innerWidth - ownerDocument.documentElement.clientWidth
+
+    ownerDocument.documentElement.style.overflow = 'hidden'
+    ownerDocument.documentElement.style.paddingRight = `${scrollbarWidth}px`
 
     return () => {
-      document.documentElement.style.overflow = overflow
-      document.documentElement.style.paddingRight = paddingRight
+      ownerDocument.documentElement.style.overflow = overflow
+      ownerDocument.documentElement.style.paddingRight = paddingRight
     }
   }, [dialogState, hasParentDialog])
 

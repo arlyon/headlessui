@@ -28,6 +28,7 @@ import { Keys } from '../keyboard'
 import { isDisabledReactIssue7711 } from '../../utils/bugs'
 import { OpenClosedProvider, State, useOpenClosed } from '../../internal/open-closed'
 import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
+import { getOwnerDocument } from '../../utils/owner-document'
 
 enum DisclosureStates {
   Open,
@@ -171,13 +172,14 @@ let DisclosureRoot = forwardRefWithAs(function Disclosure<
   let close = useCallback(
     (focusableElement?: HTMLElement | MutableRefObject<HTMLElement | null>) => {
       dispatch({ type: ActionTypes.CloseDisclosure })
+      let ownerDocument = getOwnerDocument(internalDisclosureRef)
 
       let restoreElement = (() => {
-        if (!focusableElement) return document.getElementById(buttonId)
+        if (!focusableElement) return ownerDocument.getElementById(buttonId)
         if (focusableElement instanceof HTMLElement) return focusableElement
         if (focusableElement.current instanceof HTMLElement) return focusableElement.current
 
-        return document.getElementById(buttonId)
+        return ownerDocument.getElementById(buttonId)
       })()
 
       restoreElement?.focus()
@@ -234,6 +236,7 @@ let Button = forwardRefWithAs(function Button<TTag extends ElementType = typeof 
   let [state, dispatch] = useDisclosureContext('Disclosure.Button')
   let internalButtonRef = useRef<HTMLButtonElement | null>(null)
   let buttonRef = useSyncRefs(internalButtonRef, ref)
+  let ownerDocument = getOwnerDocument(internalButtonRef)
 
   let panelContext = useDisclosurePanelContext()
   let isWithinPanel = panelContext === null ? false : panelContext === state.panelId
@@ -249,7 +252,7 @@ let Button = forwardRefWithAs(function Button<TTag extends ElementType = typeof 
             event.preventDefault()
             event.stopPropagation()
             dispatch({ type: ActionTypes.ToggleDisclosure })
-            document.getElementById(state.buttonId)?.focus()
+            ownerDocument.getElementById(state.buttonId)?.focus()
             break
         }
       } else {
@@ -263,7 +266,7 @@ let Button = forwardRefWithAs(function Button<TTag extends ElementType = typeof 
         }
       }
     },
-    [dispatch, isWithinPanel, state.disclosureState, state.buttonId]
+    [dispatch, isWithinPanel, state.disclosureState, state.buttonId, ownerDocument]
   )
 
   let handleKeyUp = useCallback((event: ReactKeyboardEvent<HTMLButtonElement>) => {
@@ -284,12 +287,12 @@ let Button = forwardRefWithAs(function Button<TTag extends ElementType = typeof 
 
       if (isWithinPanel) {
         dispatch({ type: ActionTypes.ToggleDisclosure })
-        document.getElementById(state.buttonId)?.focus()
+        ownerDocument.getElementById(state.buttonId)?.focus()
       } else {
         dispatch({ type: ActionTypes.ToggleDisclosure })
       }
     },
-    [dispatch, props.disabled, state.buttonId, isWithinPanel]
+    [dispatch, props.disabled, state.buttonId, isWithinPanel, ownerDocument]
   )
 
   let slot = useMemo<ButtonRenderPropArg>(
