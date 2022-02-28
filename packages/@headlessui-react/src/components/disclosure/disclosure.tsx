@@ -22,7 +22,7 @@ import React, {
 import { Props } from '../../types'
 import { match } from '../../utils/match'
 import { forwardRefWithAs, render, Features, PropsForFeatures } from '../../utils/render'
-import { useSyncRefs } from '../../hooks/use-sync-refs'
+import { optionalRef, useSyncRefs } from '../../hooks/use-sync-refs'
 import { useId } from '../../hooks/use-id'
 import { Keys } from '../keyboard'
 import { isDisabledReactIssue7711 } from '../../utils/bugs'
@@ -156,7 +156,18 @@ let DisclosureRoot = forwardRefWithAs(function Disclosure<
   let { defaultOpen = false, ...passthroughProps } = props
   let buttonId = `headlessui-disclosure-button-${useId()}`
   let panelId = `headlessui-disclosure-panel-${useId()}`
-  let disclosureRef = useSyncRefs(ref)
+  let internalDisclosureRef = useRef<HTMLElement | null>(null)
+  let disclosureRef = useSyncRefs(
+    ref,
+    optionalRef(
+      (ref) => {
+        internalDisclosureRef.current = ref as unknown as HTMLElement | null
+      },
+      props.as === undefined ||
+        // @ts-expect-error The `as` prop _can_ be a Fragment
+        props.as === React.Fragment
+    )
+  )
 
   let reducerBag = useReducer(stateReducer, {
     disclosureState: defaultOpen ? DisclosureStates.Open : DisclosureStates.Closed,
