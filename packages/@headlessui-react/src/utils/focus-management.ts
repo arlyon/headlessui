@@ -1,5 +1,5 @@
 import { match } from './match'
-import { getOwnerDocument } from './owner-document'
+import { getOwnerDocument } from './owner'
 
 // Credit:
 //  - https://stackoverflow.com/a/30753870

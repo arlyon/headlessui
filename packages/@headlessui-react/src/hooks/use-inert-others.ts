@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react'
-import { getOwnerDocument } from '../utils/owner-document'
+import { getOwnerDocument } from '../utils/owner'
 import { useIsoMorphicEffect } from './use-iso-morphic-effect'
 
 let interactables = new Set<HTMLElement>()

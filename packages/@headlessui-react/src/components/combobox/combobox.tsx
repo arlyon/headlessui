@@ -36,7 +36,7 @@ import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
 import { useLatestValue } from '../../hooks/use-latest-value'
 import { useTreeWalker } from '../../hooks/use-tree-walker'
 import { sortByDomNode } from '../../utils/focus-management'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 enum ComboboxStates {
   Open,

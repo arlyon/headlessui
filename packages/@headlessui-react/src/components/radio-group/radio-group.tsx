@@ -26,7 +26,7 @@ import { Label, useLabels } from '../../components/label/label'
 import { Description, useDescriptions } from '../../components/description/description'
 import { useTreeWalker } from '../../hooks/use-tree-walker'
 import { useSyncRefs } from '../../hooks/use-sync-refs'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 interface Option {
   id: string

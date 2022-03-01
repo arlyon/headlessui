@@ -1,19 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect } from 'react'
+
+import { getOwnerWindow } from '../utils/owner'
+import { useLatestValue } from './use-latest-value'
 
 export function useWindowEvent<TType extends keyof WindowEventMap>(
   type: TType,
-  listener: (this: Window, ev: WindowEventMap[TType]) => any,
-  options?: boolean | AddEventListenerOptions
+  listener: (ev: WindowEventMap[TType]) => any,
+  options?: boolean | AddEventListenerOptions,
+  contextElement: Element | MutableRefObject<Element | null> | null = null
 ) {
-  let listenerRef = useRef(listener)
-  listenerRef.current = listener
+  let listenerRef = useLatestValue(listener)
+  let target = getOwnerWindow(contextElement)
+  console.log(target, target.document)
 
   useEffect(() => {
     function handler(event: WindowEventMap[TType]) {
-      listenerRef.current.call(window, event)
+      listenerRef.current(event)
     }
 
-    window.addEventListener(type, handler, options)
-    return () => window.removeEventListener(type, handler, options)
-  }, [type, options])
+    target.addEventListener(type, handler, options)
+    return () => target.removeEventListener(type, handler, options)
+  }, [type, options, target])
 }

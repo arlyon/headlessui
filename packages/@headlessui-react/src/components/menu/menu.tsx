@@ -35,7 +35,7 @@ import { useWindowEvent } from '../../hooks/use-window-event'
 import { useTreeWalker } from '../../hooks/use-tree-walker'
 import { useOpenClosed, State, OpenClosedProvider } from '../../internal/open-closed'
 import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 enum MenuStates {
   Open,

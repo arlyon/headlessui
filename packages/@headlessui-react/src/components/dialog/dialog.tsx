@@ -33,7 +33,7 @@ import { useWindowEvent } from '../../hooks/use-window-event'
 import { useOpenClosed, State } from '../../internal/open-closed'
 import { useServerHandoffComplete } from '../../hooks/use-server-handoff-complete'
 import { StackProvider, StackMessage } from '../../internal/stack-context'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 enum DialogStates {
   Open,

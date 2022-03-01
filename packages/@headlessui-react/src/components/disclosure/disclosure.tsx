@@ -28,7 +28,7 @@ import { Keys } from '../keyboard'
 import { isDisabledReactIssue7711 } from '../../utils/bugs'
 import { OpenClosedProvider, State, useOpenClosed } from '../../internal/open-closed'
 import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 enum DisclosureStates {
   Open,

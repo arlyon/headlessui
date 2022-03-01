@@ -33,7 +33,7 @@ import { isFocusableElement, FocusableMode, sortByDomNode } from '../../utils/fo
 import { useWindowEvent } from '../../hooks/use-window-event'
 import { useOpenClosed, State, OpenClosedProvider } from '../../internal/open-closed'
 import { useResolveButtonType } from '../../hooks/use-resolve-button-type'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 enum ListboxStates {
   Open,

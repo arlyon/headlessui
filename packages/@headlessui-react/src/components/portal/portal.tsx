@@ -18,7 +18,7 @@ import { useIsoMorphicEffect } from '../../hooks/use-iso-morphic-effect'
 import { usePortalRoot } from '../../internal/portal-force-root'
 import { useServerHandoffComplete } from '../../hooks/use-server-handoff-complete'
 import { useSyncRefs } from '../../hooks/use-sync-refs'
-import { getOwnerDocument } from '../../utils/owner-document'
+import { getOwnerDocument } from '../../utils/owner'
 
 function usePortalTarget(ref: MutableRefObject<HTMLElement>): HTMLElement | null {
   let forceInRoot = usePortalRoot()
